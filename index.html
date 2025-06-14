@@ -1,47 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Landing Page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charity: Water Student Movement</title>
+  <!-- Import a Google Font for better text style -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Set up basic styles for the page */
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    /* Header styles */
+    .header {
+      background-color: #ffd700; /* Yellow background */
+      display: flex;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    /* Add a pill-shaped white background behind the logo */
+    .logo-bg {
+      background-color: #fff; /* White background */
+      border-radius: 999px;   /* Makes the shape pill-like */
+      padding: 0.5rem 1.5rem; /* Space around the logo */
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Optional: subtle shadow */
+    }
+
+    .header img.logo {
+      height: 40px;
+      /* No background or border here, handled by .logo-bg */
+    }
+
+    /* Hero section styles */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+    }
+
+    .hero img.main-photo {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+
+    .hero-content {
+      max-width: 500px;
+      padding: 2rem;
+    }
+
+    /* Move the photo-strip inside the hero and align it with the main photo */
+    .photo-strip {
+      display: flex;
+      justify-content: flex-start; /* Align to the left (with main photo) */
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 2rem 0 0 0; /* Remove top margin, keep spacing below */
+    }
+
+    /* Optional: Add a little left margin to align with main photo if needed */
+    .main-photo-and-strip {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Align children (main photo and strip) to the left */
+    }
+
+    .hero-content h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Style for colored words in the heading */
+    .hero-content h1 span.clean {
+      color: #003366;
+      font-weight: bold;
+    }
+
+    .hero-content h1 span.real {
+      color: #003366;
+      font-weight: bold;
+    }
+
+    .hero-content h1 span.you {
+      color: #ffd700;
+      font-weight: bold;
+    }
+
+    .hero-content p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Call-to-action button styles */
+    .cta-button {
+      display: inline-block;
+      background-color: #6699aa;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .cta-button:hover {
+      background-color: #4d7a8a;
+    }
+
+    /* Photo strip styles */
+    .photo-strip {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 2rem 0;
+    }
+
+    .photo-strip img {
+      max-width: 150px;
+      height: auto;
+      border-radius: 8px;
+      /* Make sure there is no border on any photo by default */
+      border: none;
+    }
+    .photo-strip img.first-photo {
+      max-width: 180px;
+      /* Remove any border that might be set elsewhere */
+      border: none;
+    }
+    /* Make the second photo even wider to avoid smushing */
+    .photo-strip img.second-photo {
+      max-width: 260px; /* Increased width for charitywatersub2.webp */
+    }
+
+    /* Popup overlay covers the whole screen */
+    .popup-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4); /* Semi-transparent background */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* Popup box styles */
+    .popup-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+      position: relative; /* Needed for absolute positioning of close button */
+    }
+
+    /* Move the close button to the top right corner */
+    .popup-box button.close-btn {
+      background: #bbb;
+      color: #fff;
+      border: none;
+      font-size: 1.2rem;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      margin: 0;
+      cursor: pointer;
+      line-height: 2rem;
+      padding: 0;
+    }
+
+    .popup-box label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .popup-box input[type="email"] {
+      width: 90%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .popup-box button {
+      background: #003366;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Hamburger menu styles */
+    .hamburger {
+      display: none; /* Hidden on large screens */
+      flex-direction: column;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: 0; /* Align to right */
+    }
+    .hamburger span {
+      height: 4px;
+      width: 100%;
+      background: #000; /* Black hamburger lines */
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Dropdown menu styles */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 2rem;
+      background: #000; /* Black background */
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      min-width: 140px;
+      z-index: 100;
+      flex-direction: column;
+      padding: 0.5rem 0;
+    }
+    .dropdown-menu a {
+      color: #fff; /* White text */
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      display: block;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .dropdown-menu a:hover {
+      background: #222;
+    }
+
+    /* Responsive: show hamburger on small screens */
+    @media (max-width: 900px) {
+      .hamburger {
+        display: flex;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Hero Section: This is the main banner at the top of the page -->
-    <section class="hero">
-        <!-- Main headline -->
-        <h1>Clean Water for Everyone</h1>
-        <!-- Subheadline -->
-        <p>Join us in bringing safe, clean water to communities in need.</p>
-    </section>
+  <!-- Header with logo and hamburger menu in yellow bar -->
+  <div class="header" style="position:relative;">
+    <span class="logo-bg">
+      <img src="img/cw_logo-2.png" alt="Charity: Water logo" class="logo">
+    </span>
+    <!-- Hamburger menu button in top right -->
+    <div class="hamburger" id="hamburger-menu" aria-label="Open menu" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <!-- Dropdown menu in top right, black background -->
+    <nav class="dropdown-menu" id="dropdown-menu">
+      <a href="#">About</a>
+      <a href="#">Donate</a>
+      <a href="#">Our Mission</a>
+    </nav>
+  </div>
 
-    <!-- Story Section: This tells the story of the nonprofit -->
-    <section class="story">
-        <h2>Our Story</h2>
-        <p>
-         
-    </section>
+  <!-- Hero section with main image and heading -->
+  <section class="hero">
+    <!-- Group main photo and photo-strip together for alignment -->
+    <div class="main-photo-and-strip">
+      <img src="img/Charity water main.png" alt="Charity: Water main" class="main-photo" />
+      <div class="photo-strip">
+        <img src="img/charity water sub.png" alt="Charity: Water sub" class="first-photo" />
+        <img src="img/charitywatersub2.webp" alt="Charity: Water sub 2" class="second-photo" />
+        <img src="img/charitywatersub3.jpeg" alt="Charity: Water sub 3" class="third-photo" />
+      </div>
+    </div>
+    <div class="hero-content">
+      <!-- Main heading with colored words -->
+      <h1>
+        <span class="clean">Clean</span> <span class="real">Water.</span><br>
+        <span class="real">Real</span> Impact.<br>
+        Powered by <span class="you">You.</span>
+      </h1>
+      <!-- Short description -->
+      <p>
+        Join a global student movement bringing clean water to those who need it most, and see exactly how your support makes change happen.
+      </p>
+      <!-- Button to join the movement -->
+      <a href="#" class="cta-button" id="join-btn">Join the Movement!</a>
+    </div>
+  </section>
 
-    <!-- Real-World Impact Story Section -->
-    <section class="impact-story">
-        <!-- Section headline -->
-        <h2>Real Impact: Meet Amina</h2>
-        <!-- Container for image and text -->
-        <div class="impact-content">
-            <!-- Impact image -->
-            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Amina smiling with clean water" class="impact-image">
-            <!-- Impact story text -->
-            <p>
-                Amina used to walk miles every day to collect water for her family. Thanks to your support, her village now has a clean water well. Amina can go to school and her family is healthier and happier.
-            </p>
-        </div>
-    </section>
+  <!-- Popup overlay for email entry -->
+  <div class="popup-overlay" id="popup">
+    <div class="popup-box">
+      <!-- Close button is now in the top right corner -->
+      <button class="close-btn" id="close-popup" title="Close">&times;</button>
+      <form>
+        <label for="email">Enter your email to join:</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        <br>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
 
-    <!-- Call-to-Action Section: This encourages visitors to take action -->
-    <section class="call-to-action">
-        <h2>Make a Difference</h2>
-        <p>Your support can help save lives. Every donation brings us closer to a world with clean water for all.</p>
-        <a href="#" class="donate-button">Donate Now</a>
-    </section>
+  <script>
+    // Get elements
+    var joinBtn = document.getElementById('join-btn');
+    var popup = document.getElementById('popup');
+    var closeBtn = document.getElementById('close-popup');
+
+    // Show popup when join button is clicked
+    joinBtn.onclick = function(e) {
+      e.preventDefault(); // Prevent page jump
+      popup.style.display = 'flex'; // Show popup
+    };
+
+    // Hide popup when close button is clicked
+    closeBtn.onclick = function() {
+      popup.style.display = 'none';
+    };
+
+    // Optional: Hide popup when clicking outside the box
+    popup.onclick = function(e) {
+      if (e.target === popup) {
+        popup.style.display = 'none';
+      }
+    };
+
+    // Hamburger menu functionality
+    var hamburger = document.getElementById('hamburger-menu');
+    var dropdown = document.getElementById('dropdown-menu');
+
+    hamburger.onclick = function() {
+      // Toggle dropdown menu
+      if (dropdown.style.display === "flex") {
+        dropdown.style.display = "none";
+      } else {
+        dropdown.style.display = "flex";
+      }
+    };
+
+    // Optional: close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!hamburger.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    // Optional: allow keyboard access
+    hamburger.onkeydown = function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        hamburger.click();
+      }
+    };
+  </script>
 </body>
 </html>
+
